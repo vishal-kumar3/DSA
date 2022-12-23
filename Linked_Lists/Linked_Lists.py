@@ -16,15 +16,6 @@ class SLinkedList:
     def __init__(self):
         self.head = None
 
-    # Find Linked List's Head
-    def listHead(self):
-        node = self.head
-        while True:
-            if node.next is None:
-                print(node.data)
-                break
-            node = node.next
-
     # Print elements of Linked list Using 'Recursion'
     def listPrintFunc(self):
         node = self.head
