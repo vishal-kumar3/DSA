@@ -34,6 +34,33 @@ class SLinkedList:
             node = node.next
         print('None')
 
+    # To find the length of linked list
+    def size(self):
+        node = self.head
+        size = 0
+        while node is not None:
+            size+=1
+            node = node.next
+        return size
+    
+
+    def sum(self):
+        node = self.head
+        sum = 0
+        while node is not None:
+            sum = sum + node.data
+            node = node.next
+        return sum
+
+    
+    def maxNum(self):
+        node = self.head
+        max_num = []
+        while node is not None:
+            max_num.append(node.data)
+            node = node.next
+        return max(max_num)
+
     # insert at end node via list of node == nodes
     def insertAtLast(self, data):
         node = self.head
@@ -51,7 +78,6 @@ class SLinkedList:
                 node = node.next
 
     # insert at beginning
-
     def insertAtStart(self, data):
         # data into a New Node
         NewNode = Node(data)
@@ -59,6 +85,7 @@ class SLinkedList:
         NewNode.next = self.head
         # yaha NewNode ko head bana rhe h
         self.head = NewNode
+
 
     def insertInBetween(self, data):
         middleNode = Node(data)
@@ -98,14 +125,32 @@ class SLinkedList:
         while node is not None:
             if node.data == target:
                 break
-
             prev = node
             node = node.next
         
         if node is None:
             return
-        
         prev.next = node.next
         node = None
 
+    # Normal Searching
+    def search(self, target):
+        node = self.head
+        index = 0
+        while node is not None:
+            if node.data == target:
+                return index
+            node = node.next
+            index+=1
+        return -1
 
+
+list1 = SLinkedList()
+list1.insertAtStart(0)
+list1.insertAtStart(-2)
+list1.insertAtStart(10)
+# list1.listPrintLoop()
+# print(list1.sum())
+# print(list1.size())
+# print(list1.maxNum())
+print(list1.search(-2))
