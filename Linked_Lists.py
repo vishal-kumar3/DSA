@@ -64,18 +64,11 @@ class SLinkedList:
     # insert at end node via list of node == nodes
     def insertAtLast(self, data):
         node = self.head
-        while True:
-            # Node ka end part find kro
+        while node is not None:
             if node.next is None:
-                # milne pe None ko data se replace kro
-                for element in data:
-                    node.next = Node(element)
-                    node = node.next
-                return node
-
-            else:
-                # nhi mila to node me aage badho
-                node = node.next
+                node.next = Node(data)
+                return
+            node = node.next
 
     # insert at beginning
     def insertAtStart(self, data):
@@ -146,11 +139,12 @@ class SLinkedList:
 
 
 list1 = SLinkedList()
-list1.insertAtStart(0)
-list1.insertAtStart(-2)
-list1.insertAtStart(10)
-# list1.listPrintLoop()
+l1 = Node(5)
+list1.head = l1
+for x in range(10000):
+    list1.insertAtLast(x)
+
 # print(list1.sum())
 # print(list1.size())
 # print(list1.maxNum())
-print(list1.search(-2))
+print(list1.search(9999))
