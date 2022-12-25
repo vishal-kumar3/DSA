@@ -105,7 +105,7 @@ class SLinkedList:
     def removeNode(self, target):
         node = self.head
 
-        # Agar first element hi target ho
+        # When Head value is the Target
         if node is not None:
             if node.data == target:
                 # head change kiye
@@ -118,12 +118,23 @@ class SLinkedList:
         while node is not None:
             if node.data == target:
                 break
+            # if not equal to target
+            # saving the previous value of node in prev variable
+            # node.next se pehle save kiya that's why previous value save hua
             prev = node
+            # changing node to next node
             node = node.next
         
+        # if target value is last element
+        # since saved previous value in prev
         if node is None:
             return
+
+        # for middile term or last term both will execute this code
+        # this code is responsible for deletion of element
+        # changed the next term
         prev.next = node.next
+        # changed deletion term to node
         node = None
 
     # Normal Searching
@@ -139,12 +150,11 @@ class SLinkedList:
 
 
 list1 = SLinkedList()
-l1 = Node(5)
+l1 = Node(0)
 list1.head = l1
-for x in range(10000):
+for x in range(1,7):
     list1.insertAtLast(x)
 
-# print(list1.sum())
-# print(list1.size())
-# print(list1.maxNum())
-print(list1.search(9999))
+list1.listPrintLoop()
+list1.removeNode(6)
+list1.listPrintLoop()
