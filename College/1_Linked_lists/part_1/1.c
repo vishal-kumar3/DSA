@@ -1,13 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 struct Node{
     int data;
     struct Node* next;
 };
-
-// struct Node* head;
 
 void display(struct Node* node){
     struct Node* current = node;
@@ -17,30 +14,22 @@ void display(struct Node* node){
     }
 }
 
-
-
 void insertNode(struct Node** node, int value){
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = value;
     newNode->next = NULL;
-    // struct Node n;
-    // n.data = value;
-    // n.next = NULL;
-
+                                  
     if(*node == NULL){
         *node = newNode;
     }
-
     else{
         struct Node* current = *node;
         while(current->next != NULL){
-            // printf("%d ", current->data);
             current = current->next;
         }
         current->next = newNode;
     }
 }
-
 
 void deleteNode(struct Node** node, int value){
     struct Node* current = *node;
@@ -81,19 +70,6 @@ void reverseList(struct Node** node){
 }
 
 
-int length(struct Node** node){
-    struct Node* current = *node;
-    int size = 0;
-    
-    while(current != NULL){
-        size++;
-        current = current->next;
-    }
-
-    return size;
-}
-
-
 int searchNode(struct Node** node, int target){
     struct Node* current = *node;
     int pos = 0;
@@ -108,21 +84,9 @@ int searchNode(struct Node** node, int target){
     return -1;
 }
 
-
 int main(){
-
     struct Node* head=NULL;
-    // struct Node* n1 = (struct Node*)malloc(sizeof(struct Node));
-    
-    // head = (struct Node*)malloc(sizeof(struct Node));
-    // head->next = NULL;
-    // n1->data = 5;
-    // n1->next = NULL;
-
-    // head = n1;
-
-    // deleteNode(&head, 0);
-
+ 
     printf("\nOperations for Linked List:-\n");
     printf(" 1.Insert a node at the end of the list\n");
     printf(" 2.Delete a node by value\n");
@@ -143,8 +107,7 @@ int main(){
             scanf("%d", &value);
         }
 
-        switch (choice)
-        {
+        switch (choice){
         case 1:
             insertNode(&head, value);
             printf("[+] %d is added!\n", value);
@@ -165,7 +128,12 @@ int main(){
             break;  
 
         case 5:
-            printf("[+] %d found at %d!\n", value, searchNode(&head, value));
+            if(searchNode(&head, value)==-1){
+                printf("[-] %d not found!\n", value);
+            }
+            else{
+                printf("[+] %d found at %d!\n", value, searchNode(&head, value));
+            }
             break;    
 
         case 6:
@@ -178,6 +146,5 @@ int main(){
             break;
         }
     }
-
     return 0;
 }

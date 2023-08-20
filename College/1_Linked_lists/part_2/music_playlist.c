@@ -49,18 +49,6 @@ void removeSongFromPlaylist(const char* title, struct Song** playlist) {
     }
 }
 
-int playlistLength(struct Song* playlist) {
-    struct Song* current = playlist;
-    int size = 0;
-
-    while (current != NULL) {
-        size++;
-        current = current->next;
-    }
-
-    return size;
-}
-
 int searchSongInPlaylist(const char* title, struct Song* playlist) {
     struct Song* current = playlist;
     int pos = 0;
@@ -93,10 +81,8 @@ int main() {
 
     printf("\n");
 
-    // Remove "Song Title 1" from the playlist
     removeSongFromPlaylist("Song Title 1", &playlist);
 
-    // Display updated playlist
     printf("\nUpdated Playlist:\n");
     displayPlaylist(playlist);
 
