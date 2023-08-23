@@ -1,19 +1,37 @@
-#include <stdio.h>
-#include <stdlib.h>
-
+#include<stdio.h>
+#include<stdbool.h>
+#include<stdlib.h>
 
 struct Node{
     int data;
     struct Node* next;
 };
 
-// struct Node* head;
 
 void display(struct Node* node){
     struct Node* current = node;
     while(current != NULL){
         printf("%d ", current->data);
         current = current->next;
+    }
+}
+
+
+void createList(struct Node** node, int* array, int len){
+    for(int i=0; i<len; i++){
+        struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+        new_node->data = array[i];
+        new_node->next = NULL;
+
+        if (*node == NULL) {
+            *node = new_node; // If the list is empty, new_node becomes the first node
+        } else {
+            struct Node* current = *node;
+            while (current->next != NULL) {
+                current = current->next;
+            }
+            current->next = new_node; // Add new_node at the end of the list
+        }
     }
 }
 
@@ -33,7 +51,6 @@ void insertNode(struct Node** node, int value) {
         current->next = new_node; // Add new_node at the end of the list
     }
 }
-
 
 
 void deleteNode(struct Node** node, int value) {
@@ -64,17 +81,16 @@ void reverseList(struct Node** node){
     struct Node* current = *node;
     struct Node* prev = NULL;
 
-    while(current != NULL){
-        struct Node* curr_next = current->next;
+    while(current!=NULL){
+        struct Node* next = current->next;
         current->next = prev;
         prev = current;
-        current = curr_next;
+        current = next;
     }
 
-    // head change kr diya
+     // head change kr diya
     *node = prev;
 }
-
 
 int length(struct Node* node){
     struct Node* current = node;   
@@ -86,6 +102,16 @@ int length(struct Node* node){
     }
 
     return size;
+}
+
+int lengthRecursive(struct Node* node){
+    static int len=0;
+    struct Node* current = node;
+    if(current==NULL){
+        return len;
+    }
+    len++;
+    return lengthRecursive(current->next);
 }
 
 
@@ -101,6 +127,65 @@ int searchNode(struct Node* node, int target){
         pos++;
     }
     return -1;
+}
+
+int searchRecursion(struct Node* node, int target){
+    struct Node* current = node;
+    static int pos = 0;
+
+    if(current==NULL){
+        return -1;
+    }
+    else if(current->data==target){
+        return pos;
+    }
+    pos++;
+    return searchRecursion(current->next, target);
+}
+
+
+void reverse_recursion(struct Node** node, struct Node* current, struct Node* prev){
+
+    if (current == NULL){
+        *node = prev;
+        return;
+    }
+    
+    struct Node* next = current->next;
+    current->next = prev;
+    return reverse_recursion(node, next, current);
+}
+
+void merge(struct Node** n1, struct Node* n2){
+    struct Node* c1 = *n1;
+    struct Node* prev = NULL;
+
+    struct Node* c2 = n2;
+
+    while(c2 != NULL){
+        struct Node* temp = c2->next;
+        if(c1->next == NULL){
+            c1->next = c2;
+            c1->next->next = NULL;
+            c2 = temp;
+        }
+        else if(c1->data >= c2->data){
+            c2->next = c1;
+            // if is just used for head nothing else
+            if(prev == NULL){
+                prev = *n1;
+                *n1 = c2;
+            }
+            else{
+                prev->next = c2;
+            }
+            c2 = temp;
+        }
+        else if(c1->data < c2->data){
+            prev = c1;
+            c1 = c1->next;
+        }
+    }
 }
 
 
