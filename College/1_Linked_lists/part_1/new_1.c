@@ -189,7 +189,36 @@ void merge(struct Node** n1, struct Node* n2){
 }
 
 
+struct Node* middle(struct Node* node){
+    struct Node* fast = node;
+    struct Node* slow = node;
+
+    int fast_cnt = 0, slow_cnt = 0;
+
+    while(fast != NULL){
+        if(fast_cnt/2 - slow_cnt == 1){
+            slow = slow->next;
+            slow_cnt++;
+        }
+        fast = fast->next;
+        fast_cnt++;
+    }
+
+    return slow;
+}
+
 int main(){
+    struct Node* head=NULL;
+    int arr[] = {1,2,3};
+    createList(&head, arr, 3);
+    display(head);
+
+    struct Node* mid = middle(head);
+    printf("\n%d\n", mid->data);
+
+}
+
+int maaaain(){
 
     struct Node* head=NULL;
     // struct Node* n1 = (struct Node*)malloc(sizeof(struct Node));
