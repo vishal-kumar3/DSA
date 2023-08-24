@@ -1,6 +1,5 @@
-#include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
+#include "../../1_Linked_lists/part_1/new_1.c"
 
 int arraySum(int* arr, int size){
 
@@ -27,8 +26,6 @@ char* stringReverse(char* s, int size){
 }
 
 int powerFunction(int base, int power){
-    
-    
     if(power<0){
         return -1;
     }
@@ -43,46 +40,36 @@ int powerFunction(int base, int power){
 }
 
 
-// void Permutation(char* s, int size){
-//     int x = size;
-    
-//     char* temp = (char*)malloc(size*sizeof(char));
-//     strcpy(temp, s);
-    
-//     while(x>0){
-//         x--;
-//         for(int i=0; i<size-1; i++){
-//             char tempChar = temp[i];
-//             temp[i] = temp[i+1];
-//             temp[i+1] = tempChar;
-
-//             printf("%s\n", temp);
-//         }
-//     }
-//     free(temp);
-// }
-
-void Permutation(char* s, int size){
-
-    for(int i=0; i<size-1; i++){
-        char* temp = (char*)malloc(size*sizeof(char));
-        strcpy(temp, s);
-        for(int j=0; j<size-1; j++){
-            
-        }
-    }
-
-
+void Permutation(char* s, int start ,int end){
+	static int i =1;
+	if(start==end){
+        printf("%d.%s\n", i,s);
+        i++;
+		return;
+	}	
+	
+	int temp = start;
+	for(; start<=end; start++){
+		char str[5]; 
+		strcpy(str, s);
+		char ch_temp = str[start];
+		str[start] = str[temp];
+		str[temp] = ch_temp;
+		// printf("%s\n", str);
+		Permutation(str, temp+1, end);
+	}
 }
 
-
-// void permuations(char* s, int size){
-
-    
-
-//     printf("%s\n", s);
-//     return permuations(s, size);
+// int lengthRecursive(struct Node* node){
+//     static int len=0;
+//     struct Node* current = node;
+//     if(current==NULL){
+//         return len;
+//     }
+//     len++;
+//     return lengthRecursive(current->next);
 // }
+
 
 int main(){
 
@@ -95,8 +82,10 @@ int main(){
     // int base = 2, power = 3;
     // printf("%d to the Power of %d = %d\n", base, power, powerFunction(base, power));
 
-    char str[] = "1234";
-    Permutation(str, 4);
+    char str[] = "123456";
+    Permutation(str, 0, 5);
+
+
 
     return 0;
 }
