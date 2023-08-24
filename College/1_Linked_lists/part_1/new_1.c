@@ -2,6 +2,8 @@
 #include<stdbool.h>
 #include<stdlib.h>
 
+#define MAIN
+
 struct Node{
     int data;
     struct Node* next;
@@ -207,6 +209,23 @@ struct Node* middle(struct Node* node){
     return slow;
 }
 
+// struct Node* middleRecursion(struct Node* node, struct Node* fast, struct Node* slow){
+
+//     if(fast == NULL){
+//         return slow;
+//     }
+
+//     static int fastcnt = 0;
+//     static int slowcnt = 0;
+
+//     fastcnt++;
+//     return middleRecursion(node, fast->next, slow);
+
+//     return middleRecursion(node, fast->next, slow->next);
+// }
+
+#ifndef MAIN
+
 int main(){
     struct Node* head=NULL;
     int arr[] = {1,2,3};
@@ -288,3 +307,5 @@ int maaaain(){
 
     return 0;
 }
+
+#endif

@@ -45,7 +45,7 @@ void push(struct Stack* stack, int value) {
 
 int pop(struct Stack* stack) {
     if (isEmpty(stack)) {
-        printf("Stack is empty\n");
+        // printf("Stack is empty\n");
         return -1;
     }
 
@@ -66,6 +66,16 @@ int peek(struct Stack* stack) {
     return stack->stackNode->data;
 }
 
+void display(struct Stack* stack) {
+    struct StackNode* current = stack->stackNode;
+    while (current != NULL) {
+        printf("%d ", current->data);
+        current = current->next;
+    }
+    printf("\n");
+}
+
+
 int main() {
     struct Stack* stack = CreateStack(5);
 
@@ -79,7 +89,7 @@ int main() {
 
     while(1){
         int choice;
-        printf("\n\nChoice> ");
+        printf("\nChoice> ");
         scanf("%d", &choice);
         int value;
 
@@ -92,7 +102,12 @@ int main() {
             break;
 
         case 2:
-            printf("%d is removed!!", pop(stack));
+            if(pop(stack)==-1){
+                printf("Stack is Empty!!");
+            }
+            else{
+                printf("%d is removed!!", pop(stack));
+            }
             break;
         
         case 3:
@@ -114,7 +129,7 @@ int main() {
             break;
 
         case 5:
-            printf("Peek : %d", peek(stack));
+            display(stack);
             break;
 
         case 6:
