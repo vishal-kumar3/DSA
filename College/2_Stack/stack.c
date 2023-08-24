@@ -2,6 +2,8 @@
 #include<stdlib.h>
 #define MAX 5
 
+#define MAIN
+
 struct Stack{
     int top;
     unsigned capacity;
@@ -73,6 +75,7 @@ void pop(struct Stack* stack){
     }
 }
 
+#ifndef MAIN
 
 int main(){
 
@@ -126,3 +129,5 @@ int main(){
     }
     return 0;
 }
+
+#endif

@@ -209,20 +209,21 @@ struct Node* middle(struct Node* node){
     return slow;
 }
 
-// struct Node* middleRecursion(struct Node* node, struct Node* fast, struct Node* slow){
+struct Node* middleRecursion(struct Node* node, struct Node* fast, struct Node* slow){
+    // struct Node* fast = node, *slow = node;
+    static int fast_cnt=0, slow_cnt=0;
 
-//     if(fast == NULL){
-//         return slow;
-//     }
+    if(fast == NULL){
+        return slow;
+    }
 
-//     static int fastcnt = 0;
-//     static int slowcnt = 0;
-
-//     fastcnt++;
-//     return middleRecursion(node, fast->next, slow);
-
-//     return middleRecursion(node, fast->next, slow->next);
-// }
+    if(fast_cnt/2 - slow_cnt == 1){
+        slow_cnt++;
+        return middleRecursion(node, fast, slow->next); 
+    }
+    fast_cnt++;
+    return middleRecursion(node, fast->next, slow);
+}
 
 #ifndef MAIN
 

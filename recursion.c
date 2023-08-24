@@ -1,6 +1,5 @@
 #include <string.h>
 #include "../../1_Linked_lists/part_1/new_1.c"
-#include "../../2_Stack/stack.c"
 
 int arraySum(int* arr, int size){
 
@@ -27,6 +26,8 @@ char* stringReverse(char* s, int size){
 }
 
 int powerFunction(int base, int power){
+    
+    
     if(power<0){
         return -1;
     }
@@ -40,18 +41,15 @@ int powerFunction(int base, int power){
     return base * powerFunction(base, power-1);
 }
 
-
 void Permutation(char* s, int start ,int end){
-	static int i =1;
+	
 	if(start==end){
-        printf("%d.%s\n", i,s);
-        i++;
 		return;
 	}	
 	
 	int temp = start;
 	for(; start<=end; start++){
-		char str[20];
+		char str[5]; 
 		strcpy(str, s);
 		char ch_temp = str[start];
 		str[start] = str[temp];
@@ -60,10 +58,6 @@ void Permutation(char* s, int start ,int end){
 		Permutation(str, temp+1, end);
 	}
 }
-
-
-// lengthRecursive();
-
 
 int main(){
 
@@ -76,31 +70,8 @@ int main(){
     // int base = 2, power = 3;
     // printf("%d to the Power of %d = %d\n", base, power, powerFunction(base, power));
 
-    // char str[] = "123456";
-    // Permutation(str, 0, 5);
-
-    struct Node* head = NULL;
-    struct Node* head2 = NULL;
-    insertNode(&head, 1);
-    insertNode(&head, 2);
-    insertNode(&head, 3);
-    insertNode(&head, 6);
-
-    insertNode(&head2, 0);
-    insertNode(&head2, 2);
-    insertNode(&head2, 7);
-    insertNode(&head2, 8);
-
-
-    printf("length = %d\n", lengthRecursive(head));
-    printf("index = %d\n", searchRecursion(head, 2));
-    // reverse_recursion(&head, head, NULL);
-    display(head);
-    printf("\n");
-    printf("middle = %d\n", middleRecursion(head, head, head)->data);
-    merge(&head, head2);
-    display(head);
-    printf("\n");
+    char str[] = "1234";
+    Permutation(str, 0, 4);
 
     return 0;
 }
