@@ -1,6 +1,6 @@
 #include <string.h>
 #include "../../1_Linked_lists/part_1/new_1.c"
-#include "../../2_Stack/stack.c"
+// #include "../../2_Stack/stack.c"
 
 int arraySum(int* arr, int size){
 
@@ -40,6 +40,30 @@ int powerFunction(int base, int power){
     return base * powerFunction(base, power-1);
 }
 
+bool isPalindrome(char* c, int s, int e){
+
+    if(s>=e){
+        return true;
+    }
+
+    if(c[s] == c[e]){
+        return isPalindrome(c, s+1, e-1);
+    }
+    else{
+        return false;
+    }
+
+}
+
+void towerOfHanoi(int n, int a, int b, int c)
+{
+    if (n > 0)
+    {
+        towerOfHanoi(n - 1, a, c, b);
+        printf("Move disc from tower %d to %d\n", a, c);
+        towerOfHanoi(n - 1, b, a, c);
+    }
+}
 
 void Permutation(char* s, int start ,int end){
 	static int i =1;
@@ -61,6 +85,43 @@ void Permutation(char* s, int start ,int end){
 	}
 }
 
+void mergeRecursive(struct Node* l1, struct Node* l2, struct Node** l3){
+
+    if(l1 == NULL && l2 == NULL){
+        return;
+    }
+
+    struct Node* temp = (struct Node*) malloc(sizeof(struct Node));
+
+    if(l1 == NULL){
+        
+        temp -> data = l2 -> data;
+        temp -> next = NULL;
+        (*l3) -> next = temp;
+        merge(l1, l2->next, &temp);
+    }
+
+    else if(l2 == NULL){
+
+        temp -> data = l1 -> data;
+        temp -> next = NULL;
+        (*l3) -> next = temp;
+        merge(l1 -> next, l2, &temp);
+    }
+
+    else if(l1 -> data >= l2 -> data){
+        temp -> data = l2 -> data;
+        temp -> next = NULL;
+        (*l3) -> next = temp;
+        merge(l1, l2->next, &temp);
+    }else{
+        temp -> data = l1 -> data;
+        temp -> next = NULL;
+        (*l3) -> next = temp;
+        merge(l1 -> next, l2, &temp);
+    }
+
+}
 
 // lengthRecursive();
 
@@ -76,31 +137,41 @@ int main(){
     // int base = 2, power = 3;
     // printf("%d to the Power of %d = %d\n", base, power, powerFunction(base, power));
 
-    // char str[] = "123456";
-    // Permutation(str, 0, 5);
+    // char c[] = "AAAAA";
+    // if(isPalindrome(c, 0, 4)){
+    //     printf("True");
+    // }
+    // else{
+    //     printf("False");
+    // }
 
-    struct Node* head = NULL;
-    struct Node* head2 = NULL;
-    insertNode(&head, 1);
-    insertNode(&head, 2);
-    insertNode(&head, 3);
-    insertNode(&head, 6);
+    // char str[] = "ABCD";
+    // Permutation(str, 0, 3);
+    // printf("\n");
 
-    insertNode(&head2, 0);
-    insertNode(&head2, 2);
-    insertNode(&head2, 7);
-    insertNode(&head2, 8);
+    // struct Node* head = NULL;
+    // struct Node* head2 = NULL;
+    // struct Node* head3 = NULL;
+    // insertNode(&head, 1);
+    // insertNode(&head, 2);
+    // insertNode(&head, 3);
+    // insertNode(&head, 6);
+
+    // insertNode(&head2, 0);
+    // insertNode(&head2, 2);
+    // insertNode(&head2, 7);
+    // insertNode(&head2, 8);
 
 
-    printf("length = %d\n", lengthRecursive(head));
-    printf("index = %d\n", searchRecursion(head, 2));
+    // printf("length = %d\n", lengthRecursive(head));
+    // printf("index = %d\n", searchRecursion(head, 2));
     // reverse_recursion(&head, head, NULL);
-    display(head);
-    printf("\n");
-    printf("middle = %d\n", middleRecursion(head, head, head)->data);
-    merge(&head, head2);
-    display(head);
-    printf("\n");
+    // display(head);
+    // printf("\n");
+    // printf("middle = %d\n", middleRecursion(head, head, head)->data);
+    // mergeRecursive(head, head2, head3);
+    // display(head);
+    // printf("\n");
 
     return 0;
 }
