@@ -55,16 +55,6 @@ bool isPalindrome(char* c, int s, int e){
 
 }
 
-void towerOfHanoi(int n, int a, int b, int c)
-{
-    if (n > 0)
-    {
-        towerOfHanoi(n - 1, a, c, b);
-        printf("Move disc from tower %d to %d\n", a, c);
-        towerOfHanoi(n - 1, b, a, c);
-    }
-}
-
 void Permutation(char* s, int start ,int end){
 	static int i =1;
 	if(start==end){
@@ -85,43 +75,52 @@ void Permutation(char* s, int start ,int end){
 	}
 }
 
-void mergeRecursive(struct Node* l1, struct Node* l2, struct Node** l3){
-
-    if(l1 == NULL && l2 == NULL){
-        return;
+void towerOfHanoiR(int n, int s, int h, int d){
+    if(n>0){
+        towerOfHanoiR(n-1, s, d, h);
+        printf("Move disc from %d to %d\n", s, h);
+        towerOfHanoiR(n-1, h, s, d);
     }
-
-    struct Node* temp = (struct Node*) malloc(sizeof(struct Node));
-
-    if(l1 == NULL){
-        
-        temp -> data = l2 -> data;
-        temp -> next = NULL;
-        (*l3) -> next = temp;
-        merge(l1, l2->next, &temp);
-    }
-
-    else if(l2 == NULL){
-
-        temp -> data = l1 -> data;
-        temp -> next = NULL;
-        (*l3) -> next = temp;
-        merge(l1 -> next, l2, &temp);
-    }
-
-    else if(l1 -> data >= l2 -> data){
-        temp -> data = l2 -> data;
-        temp -> next = NULL;
-        (*l3) -> next = temp;
-        merge(l1, l2->next, &temp);
-    }else{
-        temp -> data = l1 -> data;
-        temp -> next = NULL;
-        (*l3) -> next = temp;
-        merge(l1 -> next, l2, &temp);
-    }
-
 }
+
+// void mergeRecursive(struct Node* l1, struct Node* l2, struct Node** l3){
+
+//     if(l1 == NULL && l2 == NULL){
+//         return;
+//     }
+
+//     struct Node* temp = (struct Node*) malloc(sizeof(struct Node));
+
+//     if(l1 == NULL){
+        
+//         temp -> data = l2 -> data;
+//         temp -> next = NULL;
+//         (*l3) -> next = temp;
+//         merge(l1, l2->next, &temp);
+//     }
+
+//     else if(l2 == NULL){
+
+//         temp -> data = l1 -> data;
+//         temp -> next = NULL;
+//         (*l3) -> next = temp;
+//         merge(l1 -> next, l2, &temp);
+//     }
+
+//     else if(l1 -> data >= l2 -> data){
+//         temp -> data = l2 -> data;
+//         temp -> next = NULL;
+//         (*l3) -> next = temp;
+//         merge(l1, l2->next, &temp);
+//     }
+//     else{
+//         temp -> data = l1 -> data;
+//         temp -> next = NULL;
+//         (*l3) -> next = temp;
+//         merge(l1 -> next, l2, &temp);
+//     }
+
+// }
 
 // lengthRecursive();
 
@@ -172,6 +171,8 @@ int main(){
     // mergeRecursive(head, head2, head3);
     // display(head);
     // printf("\n");
+
+    // towerOfHanoiR(3, 1,2,3);
 
     return 0;
 }
