@@ -1,14 +1,17 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #define MAX 5
 
+
 struct Queue{
-    int back;
     int front;
+    int back;
     int capacity;
     int* array;
 };
+
 
 struct Queue* CreateQueue(int capacity){
     struct Queue* queue = (struct Queue* )malloc(sizeof(struct Queue));
@@ -19,23 +22,29 @@ struct Queue* CreateQueue(int capacity){
     return queue;
 }
 
-bool isFull(struct Queue* queue){
-    if(queue->back == queue->capacity-1){
-        return true;
+void sort(struct Queue* queue){
+    for(int i=queue->front; i<queue->back; i++){
+        for(int j=i; j<queue->back; j++){
+            if(queue->array[j]>queue->array[j+1]){
+                int temp = queue->array[j];
+                queue->array[j] = queue->array[j+1];
+                queue->array[j+1] = temp;
+            }
+        }
     }
-    return false;
+}
+
+bool isFull(struct Queue* queue){
+    return (queue->back == (queue->capacity-1));
 }
 
 bool isEmpty(struct Queue* queue){
-    if(queue->front > queue->back || queue->front == -1){
-        return true;
-    }
-    return false;
+    return ((queue->front > queue->back) || (queue->front == -1));
 }
 
 void enqueue(struct Queue* queue, int value){
     if(isFull(queue)){
-        printf("\nThe queue is Full!!\n");
+        printf("\nQueue is Full!!!\n");
         return;
     }
     if(queue->front == -1){
@@ -44,33 +53,33 @@ void enqueue(struct Queue* queue, int value){
     queue->back++;
     queue->array[queue->back] = value;
     printf("%d is added!!\n", value);
+    sort(queue);
 }
 
 void dequeue(struct Queue* queue){
     if(isEmpty(queue)){
-        printf("\nThe queue is Empty.\n");
+        printf("The Queue is Empty!!!\n");
         return;
     }
-    printf("%d is poped!!\n", queue->array[queue->front]);
+    printf("The poped element is: %d\n", queue->array[queue->front]);
     queue->front++;
 }
 
 void display(struct Queue* queue){
-    printf("\nQueue : ");
+    printf("\nQueue :- ");
     if(isEmpty(queue)){
-        printf("Empty");
+        printf("Empty\n");
+        return;
     }
-    else{
-        for(int i=queue->front; i<=queue->back; i++){
-            printf("%d ", queue->array[i]);
-        }
+    for(int i=queue->front; i<=queue->back; i++){
+        printf("%d ", queue->array[i]);
     }
     printf("\n");
 }
 
 int main(){
-    struct Queue* queue = CreateQueue(MAX);
-    
+    struct Queue* queue;
+
     int choice, value;
 
     printf("\nCircular Queue Menu:\n");
@@ -118,8 +127,5 @@ int main(){
                 printf("Invalid choice. Please enter a valid option.\n");
         }
     } while (choice != 6);
-
     return 0;
-
-
 }
