@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 struct Book{
     char title[50];
@@ -69,7 +70,7 @@ void deleteGenreFromFront(struct Genre** genre){
     struct Genre* freeGenre = *genre;
     *genre = freeGenre->nextGenre;
     while((*genre)->books != NULL){
-        deleteBookFromFront((*genre)->books);
+        deleteBookFromFront(&((*genre)->books));
         (*genre)->books = (*genre)->books->nextBook;
     }
     free(freeGenre);
@@ -104,16 +105,89 @@ void bindGenreAndBooks(struct Genre** genre, struct Book** book){
     insertBookAtFront(book, (*book)->title, (*book)->author, (*book)->publicationYear);
 }
 
+
+struct Book* search(struct Genre* genre, char genreName[], char bookName[]){
+    struct Genre* tmpGenre = genre;
+
+    while(tmpGenre != NULL){
+        if(tmpGenre->genreName == genreName){
+            struct Book* tmpBook = genre->books;
+            while(tmpBook != NULL){
+                if(tmpBook->title == bookName){
+                    return tmpBook;
+                }
+            }
+        }
+        tmpGenre = tmpGenre->nextGenre;
+    }
+    return NULL;
+}
+
+void updateGenre(struct Genre** genre, char genreName[], char bookName[]){
+    struct Genre* tmpGenre = *genre;
+    while(tmpGenre != NULL){
+        if(tmpGenre->genreName == genreName){
+            char* updateGenreName = (char*)malloc(20*sizeof(char));
+            printf("Update Genre Name: ");
+            scanf("%s", updateGenreName);
+            if(*updateGenreName != ""){
+                strcpy(tmpGenre->genreName, *updateGenreName);
+            }
+            updateBook(tmpGenre, bookName);
+            return;
+        }
+        tmpGenre = tmpGenre->nextGenre;
+    }
+
+}
+
+void updateBook(struct Genre** genre, char bookName[]){
+    struct Book* tmpBook = (*genre)->books;
+    while(tmpBook != NULL){
+        if(tmpBook->title == bookName){
+            char* updateBookName = (char*)malloc(20*sizeof(char));
+            char* updateBookAuthor = (char*)malloc(20*sizeof(char));
+            int* updateBookPublicationYear = (int*)malloc(20*sizeof(int));
+
+            printf("Update Book Name: ");
+            scanf("%s", updateBookName);
+            printf("Update Book Author: ");
+            scanf("%s", updateBookAuthor);
+            printf("Update Book PublicationYear: ");
+            scanf("%d", updateBookPublicationYear);
+
+            strcpy(tmpBook->title, *updateBookName);
+            strcpy(tmpBook->author, *updateBookAuthor);
+            tmpBook->publicationYear = *updateBookPublicationYear;
+            return;
+        }
+        tmpBook = tmpBook->nextBook;
+    }
+}
+
 int main(){
 
-    struct Book* book = createBook("HarryPotter", "JKRolling", 2001);
-    struct Genre* adventure = createGenre("adventure");
+    // struct Book* book = createBook("HarryPotter", "JKRolling", 2001);
+    // struct Book* book2 = createBook("A1", "A1", 2001);
+    // struct Genre* adventure = createGenre("adventure");
+    // struct Genre* genre2 = createGenre("NewGenre");
 
-    insertBookAtFront(&book, "HP", "JK", 2002);
-    insertBookAtFront(&book, "HP", "JK", 2003);
-    insertBookAtFront(&book, "HP", "JK", 2004);
+    // insertBookAtFront(&book, "HP2", "JK", 2002);
+    // insertBookAtFront(&book, "HP3", "JK", 2003);
+    // insertBookAtFront(&book, "HP4", "JK", 2004);
 
-    bindGenreAndBooks
+    // insertBookAtFront(&book2, "A2", "A2", 2001);
+    // insertBookAtFront(&book2, "A3", "A3", 2001);
+    // insertBookAtFront(&book2, "A4", "A4", 2001);
+
+    // adventure->nextGenre = genre2;
+
+    // bindGenreAndBooks(&adventure, &book);
+    // bindGenreAndBooks(&genre2, &book2);
+
+    // displayGenreBook(adventure);
+    
+    
 
     return 0;
 }
