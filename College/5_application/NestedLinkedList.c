@@ -17,8 +17,11 @@ struct Genre{
     struct Genre* nextGenre;    
 };
 
-struct Book* createBook(char title[], char author[], int publicationYear) {
-    struct Book* newBook = (struct Book*)malloc(sizeof(struct Book));
+typedef struct Book Book;
+typedef struct Genre Genre;
+
+Book* createBook(char title[], char author[], int publicationYear) {
+    Book* newBook = (Book*)malloc(sizeof(Book));
     if (newBook != NULL) {
         strcpy(newBook->title, title);
         strcpy(newBook->author, author);
@@ -28,8 +31,8 @@ struct Book* createBook(char title[], char author[], int publicationYear) {
     return newBook;
 }
 
-struct Genre* createGenre(char genreName[]) {
-    struct Genre* newGenre = (struct Genre*)malloc(sizeof(struct Genre));
+Genre* createGenre(char genreName[]) {
+    Genre* newGenre = (Genre*)malloc(sizeof(Genre));
     if (newGenre != NULL) {
         strcpy(newGenre->genreName, genreName);
         newGenre->books = NULL;     // Initialize the book list to empty
@@ -38,82 +41,110 @@ struct Genre* createGenre(char genreName[]) {
     return newGenre;
 }
 
-void insertBookAtFront(struct Book** book, char title[], char author[], int publicationYear){
-    struct Book* newBook = createBook(title, author, publicationYear);
+void insertBookAtFront(Book** book, char title[], char author[], int publicationYear){
+    Book* newBook = createBook(title, author, publicationYear);
     newBook->nextBook = *book;
     *book = newBook;
 }
 
-void deleteBookFromFront(struct Book** book){
-    struct Book* freeBook = *book;
-    *book = freeBook->nextBook;
-    free(freeBook);
+void insertGenreAtFront(Genre** genre, char genreName[]){
+    Genre* newGenre = createGenre(genreName);
+    newGenre->nextGenre = *genre;
+    *genre = newGenre;
+    printf("\n[+] %s is added to Genre List!!!", genreName);
 }
 
-void displayBook(struct Book* book){
-    struct Book* temp = book;
+void insertBookToGenre(Genre* genre){
+    Genre* currentGenre = genre;
+    char genreName[50];
+    printf("\nEnter Genre Name:- ");
+    scanf(" %[^\n]", genreName); 
+
+    while(currentGenre != NULL){
+        if(strcmp(currentGenre->genreName, genreName)==0){
+            Book** currentBook = &(currentGenre->books);
+            char bookName[50], author[50];
+            int year;
+            printf("Enter Book's Title:- ");
+            scanf(" %[^\n]", &bookName); 
+            printf("Enter Book's Author Name:- "); 
+            scanf(" %[^\n]", &author); 
+            printf("Enter Book's Publication Year:- "); 
+            scanf("%d", &year);
+            insertBookAtFront(currentBook, bookName, author, year);
+            printf("\n[+] %s is added to Genre %s", bookName, genreName);
+        }
+        currentGenre = currentGenre->nextGenre;
+    }
+}
+
+// void deleteGenreFromFront(Genre** genre){
+//     Genre* freeGenre = *genre;
+//     *genre = freeGenre->nextGenre;
+//     while((*genre)->books != NULL){
+//         deleteBookFromFront((*genre)->books);
+//         (*genre)->books = (*genre)->books->nextBook;
+//     }
+//     free(freeGenre);
+// }
+
+
+
+// void deleteBookFromFront(Book* book){
+//     Book* freeBook = book;
+//     book = book->nextBook;
+
+//     free(freeBook);
+// }
+
+void displayBook(Book* book){
+    Book* temp = book;
     printf("\n");
     while(temp != NULL){
-        printf("%d ", temp->publicationYear);
+        printf("%s ", temp->title);
         temp = temp->nextBook;
     }
     printf("\n");
 }
 
-void insertGenreAtFront(struct Genre** genre, char genreName[]){
-    struct Genre* newGenre = createGenre(genreName);
-    newGenre->nextGenre = *genre;
-    *genre = newGenre;
-}
 
-void deleteGenreFromFront(struct Genre** genre){
-    struct Genre* freeGenre = *genre;
-    *genre = freeGenre->nextGenre;
-    while((*genre)->books != NULL){
-        deleteBookFromFront(&((*genre)->books));
-        (*genre)->books = (*genre)->books->nextBook;
-    }
-    free(freeGenre);
-}
+// void displayGenre(Genre* genre){
+//     Genre* tmp = genre;
+//     while(tmp != NULL){
+//         printf("%s ", tmp->genreName);
+//         tmp = tmp->nextGenre;
+//     }
+//     printf("\n");
+// }
 
-void displayGenre(struct Genre* genre){
-    struct Genre* tmp = genre;
-    while(tmp != NULL){
-        printf("%s ", tmp->genreName);
-        tmp = tmp->nextGenre;
-    }
-    printf("\n");
-}
-
-void displayGenreBook(struct Genre* genre){
-    struct Genre* tmp = genre;
+void displayGenreBook(Genre* genre){
+    Genre* tmp = genre;
     while(tmp != NULL){
         printf("\n%s-->", tmp->genreName);
-        while(tmp->books != NULL){
-            printf(" %s", tmp->books->title);
-            tmp->books = tmp->books->nextBook;
+        Book* tmpBook = tmp->books;
+        while(tmpBook != NULL){
+            printf(" %s", tmpBook->title);
+            tmpBook = tmpBook->nextBook;
         }
         tmp = tmp->nextGenre;
     }
     printf("\n");
 }
 
-void bindGenreAndBooks(struct Genre** genre, struct Book** book){
+void bindGenreAndBooks(Genre** genre, Book** book){
     if((*genre)->books == NULL){
         (*genre)->books = *book;
     }
-    insertBookAtFront(book, (*book)->title, (*book)->author, (*book)->publicationYear);
 }
 
 
-struct Book* search(struct Genre* genre, char genreName[], char bookName[]){
-    struct Genre* tmpGenre = genre;
-
+Book* search(Genre* genre, char genreName[], char bookName[]){
+    Genre* tmpGenre = genre;
     while(tmpGenre != NULL){
-        if(tmpGenre->genreName == genreName){
-            struct Book* tmpBook = genre->books;
+        if(strcmp(tmpGenre->genreName, genreName)==0){
+            Book* tmpBook = genre->books;
             while(tmpBook != NULL){
-                if(tmpBook->title == bookName){
+                if(strcmp(tmpBook->title, bookName)==0){
                     return tmpBook;
                 }
             }
@@ -123,17 +154,45 @@ struct Book* search(struct Genre* genre, char genreName[], char bookName[]){
     return NULL;
 }
 
-void updateGenre(struct Genre** genre, char genreName[], char bookName[]){
-    struct Genre* tmpGenre = *genre;
+void updateBook(Genre** genre, char bookName[]){
+    Book* tmpBook = (*genre)->books;
+    while(tmpBook != NULL){
+        if(strcmp(tmpBook->title, bookName)==0){
+            char* updateBookName = (char*)malloc(20*sizeof(char));
+            char* updateBookAuthor = (char*)malloc(20*sizeof(char));
+            int* updateBookPublicationYear = (int*)malloc(20*sizeof(int));
+
+            printf("\nUpdate Book Name: ");
+            scanf(" %[^\n]", updateBookName);
+            printf("Update Book Author: ");
+            scanf(" %[^\n]", updateBookAuthor);
+            printf("Update Book PublicationYear: ");
+            scanf("%d", updateBookPublicationYear);
+
+            strcpy(tmpBook->title, updateBookName);
+            strcpy(tmpBook->author, updateBookAuthor);
+            tmpBook->publicationYear = *updateBookPublicationYear;
+            displayGenreBook(*genre);
+            return;
+        }
+        tmpBook = tmpBook->nextBook;
+    }
+}
+
+void updateGenre(Genre** genre, char genreName[], char bookName[]){
+    Genre* tmpGenre = *genre;
     while(tmpGenre != NULL){
-        if(tmpGenre->genreName == genreName){
-            char* updateGenreName = (char*)malloc(20*sizeof(char));
-            printf("Update Genre Name: ");
-            scanf("%s", updateGenreName);
-            if(*updateGenreName != ""){
-                strcpy(tmpGenre->genreName, *updateGenreName);
+        if(strcmp(tmpGenre->genreName, genreName)==0){
+            char boolUpdateGenre;
+            printf("\nIf you want to update Genre Name? (y/n) ");
+            scanf("%s", &boolUpdateGenre);
+            if(strcmp(boolUpdateGenre, "y")==0){
+                char* updateGenreName = (char*)malloc(20*sizeof(char));
+                printf("\nUpdate Genre Name: ");
+                scanf(" %[^\n]", updateGenreName);
+                strcpy(tmpGenre->genreName, updateGenreName);
             }
-            updateBook(tmpGenre, bookName);
+            updateBook(&tmpGenre, bookName);
             return;
         }
         tmpGenre = tmpGenre->nextGenre;
@@ -141,53 +200,126 @@ void updateGenre(struct Genre** genre, char genreName[], char bookName[]){
 
 }
 
-void updateBook(struct Genre** genre, char bookName[]){
-    struct Book* tmpBook = (*genre)->books;
-    while(tmpBook != NULL){
-        if(tmpBook->title == bookName){
-            char* updateBookName = (char*)malloc(20*sizeof(char));
-            char* updateBookAuthor = (char*)malloc(20*sizeof(char));
-            int* updateBookPublicationYear = (int*)malloc(20*sizeof(int));
+void deleteSpecificBook(Genre** head){
+    char genreNameDelete[50], bookNameDelete[50];
+    printf("\nEnter Genre Name:- ");
+    scanf(" %[^\n]", genreNameDelete);
+    printf("Enter Book Name:- ");
+    scanf(" %[^\n]", bookNameDelete);
 
-            printf("Update Book Name: ");
-            scanf("%s", updateBookName);
-            printf("Update Book Author: ");
-            scanf("%s", updateBookAuthor);
-            printf("Update Book PublicationYear: ");
-            scanf("%d", updateBookPublicationYear);
-
-            strcpy(tmpBook->title, *updateBookName);
-            strcpy(tmpBook->author, *updateBookAuthor);
-            tmpBook->publicationYear = *updateBookPublicationYear;
-            return;
+    Genre* currentGenre = *head;
+    while(currentGenre != NULL){
+        if(strcmp(currentGenre->genreName, genreNameDelete)==0){
+            // Always remember to store head so that you can change when needed.
+            Book** books = &(currentGenre->books);
+            Book* currentBook = *books;
+            Book* prev = NULL;
+            while(currentBook != NULL){
+                if(strcmp(currentBook->title, bookNameDelete)==0){
+                    if(prev==NULL){
+                        *books = currentBook->nextBook;
+                    }
+                    else{
+                        prev->nextBook = currentBook->nextBook;
+                    }
+                    free(currentBook);
+                    return;
+                }
+                prev = currentBook;
+                currentBook = currentBook->nextBook;
+            }
         }
-        tmpBook = tmpBook->nextBook;
+        currentGenre = currentGenre->nextGenre;
+    }
+}
+
+
+void deleteGenre(Genre** head){
+    char genreNameDelete[50];
+    printf("\nEnter Genre Name:- ");
+    scanf(" %[^\n]", genreNameDelete);
+
+    Genre* currentGenre = *head;
+    Genre* prevGenre = NULL;
+
+    while(currentGenre != NULL){
+        if(strcmp(currentGenre->genreName, genreNameDelete)==0){
+            Book** deleteBooks = &(currentGenre->books);
+            while(*deleteBooks!=NULL){
+                Book* tmp = *deleteBooks;
+                *deleteBooks = (*deleteBooks)->nextBook;
+                free(tmp);
+            }
+            if(prevGenre==NULL){
+                *head = currentGenre->nextGenre;
+            }
+            else{
+                prevGenre->nextGenre = currentGenre->nextGenre;
+                free(currentGenre);
+                return;
+            }
+        }
+        prevGenre = currentGenre;
+        currentGenre = currentGenre->nextGenre;
     }
 }
 
 int main(){
 
-    // struct Book* book = createBook("HarryPotter", "JKRolling", 2001);
-    // struct Book* book2 = createBook("A1", "A1", 2001);
-    // struct Genre* adventure = createGenre("adventure");
-    // struct Genre* genre2 = createGenre("NewGenre");
+    Genre* genres = NULL;
 
-    // insertBookAtFront(&book, "HP2", "JK", 2002);
-    // insertBookAtFront(&book, "HP3", "JK", 2003);
-    // insertBookAtFront(&book, "HP4", "JK", 2004);
+    while(1){
 
-    // insertBookAtFront(&book2, "A2", "A2", 2001);
-    // insertBookAtFront(&book2, "A3", "A3", 2001);
-    // insertBookAtFront(&book2, "A4", "A4", 2001);
+        printf("\n\n1.Add new Genre."
+        "\n2.Add new book to specific Genre"
+        "\n3.Display All Genres and Books"
+        "\n4.Delete Complete Genre with all Books under it"
+        "\n5.Delete specific Book"
+        "\n6.Update Genre/Book Details");
 
-    // adventure->nextGenre = genre2;
+        int choice;
+        char genreName[50];
+        char bookName[50];
+        printf("\n\nChoice> ");
+        scanf("%d", &choice);
 
-    // bindGenreAndBooks(&adventure, &book);
-    // bindGenreAndBooks(&genre2, &book2);
+        switch (choice)
+        {
+        case 1:
+            printf("\nGenre Title> ");
+            scanf(" %[^\n]", genreName);
+            insertGenreAtFront(&genres, genreName);
+            break;
 
-    // displayGenreBook(adventure);
-    
-    
+        case 2:
+            insertBookToGenre(genres);
+            break;
+        
+        case 3:
+            displayGenreBook(genres);
+            break;
+
+        case 4:
+            deleteGenre(&genres);
+            break;
+
+        case 5:
+            deleteSpecificBook(&genres);
+            break;
+
+        case 6:
+            printf("\nUpdate Genre...\nSelect Genre> ");
+            scanf(" %[^\n]", &genreName);
+            printf("Select Book> ");
+            scanf(" %[^\n]", &bookName);
+            updateGenre(&genres, genreName, bookName);
+            break;
+
+        default:
+            return 0;
+        }
+    }
+
 
     return 0;
 }
